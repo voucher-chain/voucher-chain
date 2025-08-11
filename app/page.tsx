@@ -1,8 +1,7 @@
 "use client"
 
 import type React from "react"
-
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import {
   ArrowRight,
@@ -23,10 +22,18 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { usePrivy } from '@privy-io/react-auth'
+import LoginModal from '@/components/auth/LoginModal'
 
 export default function HomePage() {
   const heroRef = useRef<HTMLDivElement>(null)
   const featuresRef = useRef<HTMLDivElement>(null)
+  const [mounted, setMounted] = useState(false)
+  const { authenticated, user } = usePrivy()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -98,9 +105,10 @@ export default function HomePage() {
           <div className="grid-pattern animate-grid-move"></div>
         </div>
 
-        {/* Enhanced Floating Particles */}
+        {/* Enhanced Floating Particles - Only render on client */}
+        {mounted && (
         <div className="absolute inset-0">
-          {[...Array(100)].map((_, i) => (
+            {[...Array(50)].map((_, i) => (
             <div
               key={i}
               className="absolute animate-float-particle"
@@ -112,14 +120,15 @@ export default function HomePage() {
               }}
             >
               <div
-                className="w-1 h-1 bg-gradient-to-r from-white/30 to-cyan-400/30 rounded-full"
+                  className="w-1 h-1 bg-gradient-to-r from-cyan-400/60 to-purple-400/60 rounded-full"
                 style={{
-                  boxShadow: "0 0 6px rgba(34, 211, 238, 0.4)",
+                    boxShadow: "0 0 8px rgba(34, 211, 238, 0.6)",
                 }}
               />
             </div>
           ))}
         </div>
+        )}
       </div>
 
       {/* Enhanced Header */}

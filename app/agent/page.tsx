@@ -15,6 +15,10 @@ import {
   Download,
   Eye,
   Sparkles,
+  AlertTriangle,
+  Loader2,
+  CheckCircle,
+  Shield,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -23,13 +27,22 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { usePrivy } from '@privy-io/react-auth'
+import LoginModal from '@/components/auth/LoginModal'
+import WalletManager from '@/components/auth/WalletManager'
 
 export default function AgentDashboard() {
   const [selectedToken, setSelectedToken] = useState("ETN")
   const [voucherAmount, setVoucherAmount] = useState("")
   const [quantity, setQuantity] = useState("")
+  
+  const { authenticated, user, logout } = usePrivy()
 
   const handleMintVoucher = () => {
+    if (!authenticated) {
+      return
+    }
     console.log("Minting voucher:", { selectedToken, voucherAmount, quantity })
   }
 
@@ -102,6 +115,8 @@ export default function AgentDashboard() {
               </div>
             </div>
             <div className="flex items-center space-x-3 animate-slide-in-right">
+              {authenticated && (
+                <>
               <Button
                 variant="ghost"
                 size="sm"
@@ -119,15 +134,103 @@ export default function AgentDashboard() {
               <Badge className="bg-gradient-to-r from-green-500/40 to-emerald-500/40 text-green-300 border-green-500/60 animate-pulse text-xs font-semibold shadow-lg">
                 Agent ID: AG001
               </Badge>
-              <Button className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-4 py-2 rounded-xl shadow-xl hover:shadow-red-500/25 transition-all duration-300 hover:scale-105 text-sm font-semibold">
+                  <Button 
+                    onClick={logout}
+                    className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl shadow-xl hover:shadow-orange-500/25 transition-all duration-300 hover:scale-105 text-sm font-semibold"
+                  >
                 Logout
               </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
       </header>
 
       <div className="relative z-10 container mx-auto px-6 py-8">
+        {/* Authentication Section */}
+        {!authenticated ? (
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 leading-tight">
+                <span className="bg-gradient-to-r from-white via-cyan-200 to-purple-200 bg-clip-text text-transparent animate-gradient-text">
+                  Become an
+                </span>
+                <br />
+                <span className="bg-gradient-to-r from-purple-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent animate-gradient-text-reverse">
+                  Agent!
+                </span>
+              </h1>
+              <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                Sign in to access the agent dashboard and start minting vouchers
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Authentication Section */}
+              <div className="space-y-6">
+                <Card className="bg-white/10 backdrop-blur-xl border-white/20">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center gap-2">
+                      <Shield className="w-5 h-5" />
+                      Authentication Required
+                    </CardTitle>
+                    <CardDescription className="text-gray-300">
+                      Sign in to access the agent dashboard
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <LoginModal />
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Agent Benefits Section */}
+              <div className="space-y-6">
+                <Card className="bg-white/10 backdrop-blur-xl border-white/20">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center gap-2">
+                      <Sparkles className="w-5 h-5" />
+                      Agent Benefits
+                    </CardTitle>
+                    <CardDescription className="text-gray-300">
+                      What you get as a VoucherChain agent
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
+                          <CheckCircle className="w-4 h-4 text-green-400" />
+                        </div>
+                        <span className="text-white text-sm">Commission on every voucher sold</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                          <CheckCircle className="w-4 h-4 text-blue-400" />
+                        </div>
+                        <span className="text-white text-sm">Real-time analytics and reporting</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                          <CheckCircle className="w-4 h-4 text-purple-400" />
+                        </div>
+                        <span className="text-white text-sm">Batch voucher minting capabilities</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center">
+                          <CheckCircle className="w-4 h-4 text-orange-400" />
+                        </div>
+                        <span className="text-white text-sm">Priority customer support</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
         {/* Enhanced Welcome Section */}
         <div className="mb-12 animate-fade-in-up">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 leading-tight">
@@ -143,6 +246,11 @@ export default function AgentDashboard() {
             Manage your voucher inventory and track your performance with our advanced analytics
           </p>
         </div>
+
+            {/* Wallet Management Section */}
+            <div className="mb-8">
+              <WalletManager />
+            </div>
 
         {/* Enhanced Stats Overview */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
@@ -199,7 +307,7 @@ export default function AgentDashboard() {
                   <div className="flex items-center text-xs">
                     <TrendingUp className="w-4 h-4 text-green-400 mr-2 group-hover:animate-bounce" />
                     <span className="text-green-400 font-semibold">{stat.change}</span>
-                    <span className="text-gray-400 ml-2">from last month</span>
+                        <span className="text-gray-400 ml-1">from last month</span>
                   </div>
                 </CardContent>
               </Card>
@@ -432,6 +540,8 @@ export default function AgentDashboard() {
             </TabsContent>
           </Tabs>
         </div>
+          </>
+        )}
       </div>
     </div>
   )

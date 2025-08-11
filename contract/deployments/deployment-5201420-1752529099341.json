@@ -1,0 +1,14 @@
+{
+  "network": "electronumTestnet",
+  "chainId": "5201420",
+  "contract": "VoucherChain",
+  "address": "0x52C84043CD9c865236f11d9Fc9F56aa003c1f922",
+  "deployer": "0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC",
+  "treasury": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+  "mintingFee": 200,
+  "redemptionFee": 100,
+  "defaultExpiryDays": 30,
+  "blockNumber": "7994535",
+  "timestamp": "2025-07-14T21:38:19.341Z",
+  "transactionHash": "0x1ad2f474aa9ee47de6ed0b4edeebb0b3d6c79538040b09072ece83d3f7035138"
+}
